@@ -20,7 +20,8 @@ STICKER_TO_COLOR = {
     'O': ORANGE,
     'G': GREEN,
     'Y': YELLOW,
-    'Z': (0, 0, 0)
+    'Z': (0, 0, 0),
+    'X': GREY
 }
 
 STICKER_LENGTH = 30

@@ -65,37 +65,73 @@ class Moves:
         self.cube.faces[b].stickers[2::3] = self.cube.faces[c].stickers[2::3]
         self.cube.faces[c].stickers[2::3] = self.cube.faces[d].stickers[2::3]
         self.cube.faces[d].stickers[2::3] = tmp
+
+    def tmp(self, *faces):
+        a, b, c, d = faces
+        tmp = self.cube.faces[4].stickers[2::3]
+        self.cube.faces[4].stickers[2::3] = self.cube.faces[1].stickers[:3]
+        self.cube.faces[1].stickers[:3] = self.cube.faces[2].stickers[0::3]
+        self.cube.faces[2].stickers[0::3] = self.cube.faces[3].stickers[-3:]
+        self.cube.faces[3].stickers[-3:] = tmp
     
-    def front(self, clockwiwe=True):
+    def front(self, clockwise=True):
         """ Rotate the side facing the player. """
-        self.cube.faces[0].frontMove(clockwiwe)
+        self.cube.faces[0].frontMove(clockwise)
 
-        if clockwiwe:
-            self._swapTop(3, 4, 1, 2)
+        if clockwise:
+            # self._swapTop(3, 4, 1, 2)
+            tmp = self.cube.faces[4].stickers[2::3]
+            self.cube.faces[4].stickers[2::3] = self.cube.faces[1].stickers[:3]
+            self.cube.faces[1].stickers[:3] = self.cube.faces[2].stickers[::3][::-1]
+            self.cube.faces[2].stickers[::3] = self.cube.faces[3].stickers[-3:]
+            self.cube.faces[3].stickers[-3:] = tmp[::-1]
+            # self.cube.faces[3].stickers[-3:] = self.sube
+            #  = tmp
         else:
-            tmp = self.cube.faces[3].stickers[:3]
-            self._swapTop(3, 2, 1, 4)
+            # tmp = self.cube.faces[3].stickers[:3]
+            # self._swapTop(3, 2, 1, 4)
 
-    @decorator
-    def up(self, clockwiwe=True):
+            tmp = self.cube.faces[4].stickers[2::3]
+            self.cube.faces[4].stickers[2::3] = self.cube.faces[3].stickers[-3:][::-1]
+            self.cube.faces[3].stickers[-3:] = self.cube.faces[2].stickers[::3]
+            self.cube.faces[2].stickers[::3] = self.cube.faces[1].stickers[:3][::-1]
+            self.cube.faces[1].stickers[:3] = tmp
+
+
+    # @decorator
+    def up(self, clockwise=True):
         """ Rotate the side on top of the front side. """
-        self.cube.faces[3].frontMove(clockwiwe)
-        self.cube.faces[1].frontMove(not clockwiwe)
+        # self.cube.faces[3].frontMove(not clockwiwe)
+        # # self.cube.faces[1].frontMove(not clockwiwe)
 
-        if clockwiwe:
-            self._swapTop(0, 4, 5, 2)
+        # if clockwiwe:
+        #     self._swapTop(0, 4, 5, 2)
+        # else:
+        #     self._swapTop(0, 2, 5, 4)
+
+        self.cube.faces[3].frontMove(clockwise)
+
+        if clockwise:
+            # tmp = self.cube.faces[4].stickers[:3]
+            # self.cube.faces[4].stickers[:3] = self.cube.faces[0].stickers[:3]
+            # self.cube.faces[0].stickers[:3] = self.cube.faces[2].stickers[:3]
+            # self.cube.faces[2].stickers[:3] = self.cube.faces[5].stickers[:3]
+            # self.cube.faces[5].stickers[:3] = tmp
+            self._swapTop(4, 0, 2, 5)
         else:
-            self._swapTop(0, 2, 5, 4)
+            self._swapTop(4, 5, 2, 0)
     
-    @decorator
+    # @decorator
     def down(self, clockwiwe=True):
         """ Rotate the side underneath the cube. """
-        self.cube.faces[1].frontMove(not clockwiwe)
+        self.cube.faces[1].frontMove(clockwiwe)
 
         if clockwiwe:
-            self._swapBot(0, 4, 5, 2)
+            # self._swapBot(0, 4, 5, 2)
+            self._swapBot(4, 5, 2, 0)
         else:
-            self._swapBot(0, 2, 5, 4)
+            self._swapBot(4, 0, 2, 5)
+            # self._swapBot(0, 2, 5, 4)
         
     # @decorator
     def left(self, clockwiwe=True):
@@ -110,12 +146,13 @@ class Moves:
     # @decorator
     def right(self, clockwiwe=True):
         """ Rotate the side to the right of the cube."""
-        self.cube.faces[2].frontMove(not clockwiwe)
+        self.cube.faces[2].frontMove(clockwiwe)
 
         if clockwiwe:
-            self._swapRight(0, 3, 5, 1)
-        else:
             self._swapRight(0, 1, 5, 3)
+            
+        else:
+            self._swapRight(0, 3, 5, 1)
 
     def _turn(self, *faces):
         a, b, c, d = faces
@@ -131,22 +168,34 @@ class Moves:
         
     def turnDown(self):
         """ Turns the whole cube to the bottom. """
+        self.cube.faces[2].frontMove(False)
+        self.cube.faces[4].frontMove()
+
+        self.cube.faces[5].frontMove()
+        self.cube.faces[5].frontMove()
+
+
         self._turn(0, 3, 5, 1)
 
         # self.cube.faces[2].stickers = self.cube.faces[2].stickers[::-1]
         # self.cube.faces[4].stickers = self.cube.faces[4].stickers[::-1]
-        self.__faceInverser(2)
-        self.__faceInverser(4)
+        # self.__faceInverser(2)
+        # self.__faceInverser(4)
 
-        # self.cube.faces[2].frontMove(False)
-        # self.cube.faces[4].frontMove()
+        
 
     def turnUp(self):
         """ Turns the whole cube to the top. """
+
+        self.cube.faces[2].frontMove()
+        self.cube.faces[4].frontMove(False)
+
+        self.cube.faces[5].frontMove()
+        self.cube.faces[5].frontMove()
+
+
         self._turn(0, 1, 5, 3)
 
-        # self.cube.faces[2].frontMove()
-        # self.cube.faces[4].frontMove(False)
 
     def turnLeft(self):
         """ Turns the whole cube to the left. """
@@ -155,11 +204,33 @@ class Moves:
         # self.cube.faces[2] = self.cube.faces[5]
         # self.cube.faces[5] = self.cube.faces[4]
         # self.cube.faces[4] = tmp
+
+        self.cube.faces[3].frontMove()
+        # self.cube.faces[1].frontMove(False)
+        self.cube.faces[1].frontMove(False)
+
+        self.cube.faces[4].frontMove()
+        self.cube.faces[4].frontMove()
+
+
         self._turn(0, 2, 5, 4)
 
-        self.__faceInverser(3)
-        self.__faceInverser(1)
+        # self.__faceInverser(3)
+        # self.__faceInverser(1)
 
-        # self.cube.faces[3].frontMove()
-        # self.cube.faces[1].frontMove(False)
+        
+
+    def turnRight(self):
+        """ Turns the whole cube to the right. """
+
+        self.cube.faces[3].frontMove(False)
+        self.cube.faces[1].frontMove()
+
+        self.cube.faces[2].frontMove()
+        self.cube.faces[2].frontMove()
+
+
+        self._turn(0, 4, 5, 2)
+
+        
     
