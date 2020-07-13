@@ -73,11 +73,7 @@ class Cube2DDisplay:
             xPos_ = xPos
             yPos_ += STICKER_LENGTH
         
-    def display(self):
-        """ Displays the cube pattern. 
-
-            :TODO: Use deep copy to save sove rotations ?
-        """
+    def updateDisplay(self):
         # ORANGE
         # self.cube.faces[3].frontMove()
         # self.cube.faces[3].frontMove()
@@ -97,6 +93,13 @@ class Cube2DDisplay:
         # self.cube.faces[5].frontMove()
         self.displayFace(self.cube.faces[5], LINE_LENGTH, 3 * LINE_LENGTH)
         
+        
+    def display(self):
+        """ Displays the cube pattern. 
+
+            :TODO: Use deep copy to save sove rotations ?
+        """
+        self.updateDisplay()
         self.mainLoop()
 
         # Get back to normal 

@@ -1,4 +1,7 @@
+import random
 class Moves:
+    LETTERS = ('R', 'L', 'U', 'F', 'D', 'B')
+
     def __init__(self, cube):
         self.cube = cube
 
@@ -18,6 +21,7 @@ class Moves:
         
         return wrapper
 
+    # @decorator
     def _swapTop(self, *faceList):
         """ Swap the fist row of each given face. """
         assert len(faceList) == 4
@@ -97,8 +101,12 @@ class Moves:
             self.cube.faces[2].stickers[::3] = self.cube.faces[1].stickers[:3][::-1]
             self.cube.faces[1].stickers[:3] = tmp
 
+    
+    def back(self, clockwise):
+        raise Exception('TODO')
 
-    # @decorator
+
+    @decorator
     def up(self, clockwise=True):
         """ Rotate the side on top of the front side. """
         # self.cube.faces[3].frontMove(not clockwiwe)
@@ -231,6 +239,50 @@ class Moves:
 
 
         self._turn(0, 4, 5, 2)
+    
+    def moveFromLetter(self, letter):
+        try:
+            index = self.LETTERS.index(letter[0])
+        except ValueError as e:
+            raise e
+
+        length = len(letter)
+        if length == 2:
+            assert letter.endswith('\'')
+        elif length > 2:
+            raise Exception('Unvalid move!')
+
+        moves = (
+            self.right,
+            self.left,
+            self.up,
+            self.front,
+            self.down,
+            self.back
+        )
+
+        moves[index](length == 1)
+
+    
+    def shuffle(self):
+        turns = (
+            self.turnDown,
+            self.turnUp,
+            self.turnRight,
+            self.turnLeft
+        )
+
+        for _ in range(100):
+            move = random.randint(0, 10)
+            if move < 7:
+                self.moveFromLetter('{}{}'.format(
+                    self.LETTERS[move],
+                    '' if random.randint(0, 1) else '\''
+                ))
+            else:
+                self.turns[move - 7]()
+
+
 
         
     

@@ -1,5 +1,5 @@
-from .Face import Face
-from .Moves import Moves
+from models.Face import Face
+from models.Moves import Moves
 # https://en.wikipedia.org/wiki/Rubik%27s_Cube
 
 COLORS = ('WHITE', 'RED', 'BLUE', 'ORANGE', 'GREEN', 'YELLOW')
