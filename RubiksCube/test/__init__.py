@@ -1,2 +1,0 @@
-from . import TestFace, TestMoves
-
