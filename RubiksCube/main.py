@@ -6,35 +6,10 @@ from models.Cube import Cube
 if __name__ == '__main__':
     cube = Cube()
 
-
-    # cube.moves.down(False)
-
-
-    # cube.faces[4].stickers[2] = 'Z'
-    # cube.faces[2].stickers[2] = 'Z'
-    # cube.moves.right()
-    # cube.moves.turnDown()
-    # cube.moves.right()
-
-
-    # cube.moves.right()
-    # cube.moves.turnLeft()
-    # cube.faces[4].stickers[2] = 'Z'
-    # cube.faces[2].stickers[2] = 'Z'
-    # cube.faces[3].stickers[2] = 'Z'
-    # cube.faces[1].stickers[2] = 'Z'
-    # cube.moves.moveFromLetter('R')
     seq = ('R', 'U', 'R\'', 'U\'')
-    for _ in range(6):
-        for letter in seq:
-            cube.moves.moveFromLetter(letter)
-
-    
-    
-    # cube.faces[5].stickers = cube.faces[5].stickers[::-1]
-
-
-    # cube.faces[5].stickers[0] = 'Z'
+    # for _ in range(6):
+    #     for letter in seq:
+    #         cube.moves.moveFromLetter(letter)
     
     """
         Indices sont inverses pour la face 5
@@ -42,7 +17,7 @@ if __name__ == '__main__':
         le decorateur ou non
     """
 
-    if 1:
+    if 0:
         
         cubeDisplay = Sequence2DDisplay(cube)
         cubeDisplay.display(seq)
@@ -51,6 +26,12 @@ if __name__ == '__main__':
         for i in range(5):
             cube.faces[i].stickers[0] = 'Z'
         cube.faces[5].stickers[-1] = 'Z'
+
+        for i in range(5):
+            cube.faces[i].stickers[3] = 'U'
+        cube.faces[5].stickers[-4] = 'U'
+
+        cube.moves.moveFromLetter('Y')
 
         cubeDisplay = Cube2DDisplay(cube)
         cubeDisplay.display()

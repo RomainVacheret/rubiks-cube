@@ -10,7 +10,7 @@ BLUE = (0, 0, 255)
 ORANGE = (255, 140, 0)
 GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
-# Backgroup
+# Background
 GREY = (169, 169, 169)
 
 STICKER_TO_COLOR = {
@@ -21,7 +21,8 @@ STICKER_TO_COLOR = {
     'G': GREEN,
     'Y': YELLOW,
     'Z': (0, 0, 0),
-    'X': GREY
+    'X': GREY,
+    'U': (50, 50, 50),
 }
 
 STICKER_LENGTH = 30
@@ -74,41 +75,24 @@ class Cube2DDisplay:
             yPos_ += STICKER_LENGTH
         
     def updateDisplay(self):
+        """ Redraw the screen. """
         # ORANGE
-        # self.cube.faces[3].frontMove()
-        # self.cube.faces[3].frontMove()
         self.displayFace(self.cube.faces[3], LINE_LENGTH , 0)
         # # GREEN WHITE BLUE
-        # self.cube.faces[4].frontMove(False)
-        # self.cube.faces[4].frontMove(False)
         self.displayFace(self.cube.faces[4], 0, LINE_LENGTH)
         self.displayFace(self.cube.faces[0], LINE_LENGTH, LINE_LENGTH)
-        # self.cube.faces[2].frontMove()
-        # self.cube.faces[2].frontMove()
         self.displayFace(self.cube.faces[2], LINE_LENGTH * 2, LINE_LENGTH)
         # RED 
         self.displayFace(self.cube.faces[1], LINE_LENGTH, 2 * LINE_LENGTH)
         # YELLOW
-        # self.cube.faces[5].frontMove()
-        # self.cube.faces[5].frontMove()
         self.displayFace(self.cube.faces[5], LINE_LENGTH, 3 * LINE_LENGTH)
         
-        
     def display(self):
-        """ Displays the cube pattern. 
+        """ Displays the cube pattern
 
             :TODO: Use deep copy to save sove rotations ?
         """
         self.updateDisplay()
         self.mainLoop()
 
-        # Get back to normal 
-        # self.cube.faces[3].frontMove()
-        # self.cube.faces[3].frontMove()
-        # self.cube.faces[4].frontMove(False)
-        # self.cube.faces[4].frontMove(False)
-        # self.cube.faces[2].frontMove()
-        # self.cube.faces[2].frontMove()
-        # self.cube.faces[5].frontMove()
-        # self.cube.faces[5].frontMove()
 

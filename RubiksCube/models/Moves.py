@@ -1,6 +1,6 @@
 import random
 class Moves:
-    LETTERS = ('R', 'L', 'U', 'F', 'D', 'B')
+    LETTERS = ('R', 'L', 'U', 'F', 'D', 'B', 'X', 'Y')
 
     def __init__(self, cube):
         self.cube = cube
@@ -12,10 +12,8 @@ class Moves:
         """ Decorator inversing back face before and after moving the cube. """
         def wrapper(*args, **kwargs):
             self = args[0]
-            # self.cube.faces[5].stickers = self.cube.faces[5].stickers[::-1]
             self.__faceInverser(5)            
             result = func(*args, **kwargs)
-            # self.cube.faces[5].stickers = self.cube.faces[5].stickers[::-1]
             self.__faceInverser(5)
             return result
         
@@ -83,17 +81,12 @@ class Moves:
         self.cube.faces[0].frontMove(clockwise)
 
         if clockwise:
-            # self._swapTop(3, 4, 1, 2)
             tmp = self.cube.faces[4].stickers[2::3]
             self.cube.faces[4].stickers[2::3] = self.cube.faces[1].stickers[:3]
             self.cube.faces[1].stickers[:3] = self.cube.faces[2].stickers[::3][::-1]
             self.cube.faces[2].stickers[::3] = self.cube.faces[3].stickers[-3:]
             self.cube.faces[3].stickers[-3:] = tmp[::-1]
-            # self.cube.faces[3].stickers[-3:] = self.sube
-            #  = tmp
         else:
-            # tmp = self.cube.faces[3].stickers[:3]
-            # self._swapTop(3, 2, 1, 4)
 
             tmp = self.cube.faces[4].stickers[2::3]
             self.cube.faces[4].stickers[2::3] = self.cube.faces[3].stickers[-3:][::-1]
@@ -109,22 +102,10 @@ class Moves:
     @decorator
     def up(self, clockwise=True):
         """ Rotate the side on top of the front side. """
-        # self.cube.faces[3].frontMove(not clockwiwe)
-        # # self.cube.faces[1].frontMove(not clockwiwe)
-
-        # if clockwiwe:
-        #     self._swapTop(0, 4, 5, 2)
-        # else:
-        #     self._swapTop(0, 2, 5, 4)
 
         self.cube.faces[3].frontMove(clockwise)
 
         if clockwise:
-            # tmp = self.cube.faces[4].stickers[:3]
-            # self.cube.faces[4].stickers[:3] = self.cube.faces[0].stickers[:3]
-            # self.cube.faces[0].stickers[:3] = self.cube.faces[2].stickers[:3]
-            # self.cube.faces[2].stickers[:3] = self.cube.faces[5].stickers[:3]
-            # self.cube.faces[5].stickers[:3] = tmp
             self._swapTop(4, 0, 2, 5)
         else:
             self._swapTop(4, 5, 2, 0)
@@ -135,11 +116,9 @@ class Moves:
         self.cube.faces[1].frontMove(clockwiwe)
 
         if clockwiwe:
-            # self._swapBot(0, 4, 5, 2)
             self._swapBot(4, 5, 2, 0)
         else:
             self._swapBot(4, 0, 2, 5)
-            # self._swapBot(0, 2, 5, 4)
         
     # @decorator
     def left(self, clockwiwe=True):
@@ -169,78 +148,43 @@ class Moves:
         self.cube.faces[b] = self.cube.faces[c]
         self.cube.faces[c] = self.cube.faces[d]
         self.cube.faces[d] = tmp
-
-        # Maybe swap both
-        # self.cube.faces[e].frontMove(False)
-        # self.cube.faces[f].frontMove()
         
     def turnDown(self):
         """ Turns the whole cube to the bottom. """
         self.cube.faces[2].frontMove(False)
         self.cube.faces[4].frontMove()
 
-        self.cube.faces[5].frontMove()
-        self.cube.faces[5].frontMove()
-
-
         self._turn(0, 3, 5, 1)
-
-        # self.cube.faces[2].stickers = self.cube.faces[2].stickers[::-1]
-        # self.cube.faces[4].stickers = self.cube.faces[4].stickers[::-1]
-        # self.__faceInverser(2)
-        # self.__faceInverser(4)
-
-        
 
     def turnUp(self):
         """ Turns the whole cube to the top. """
-
         self.cube.faces[2].frontMove()
         self.cube.faces[4].frontMove(False)
 
-        self.cube.faces[5].frontMove()
-        self.cube.faces[5].frontMove()
-
-
         self._turn(0, 1, 5, 3)
 
-
+    @decorator
     def turnLeft(self):
         """ Turns the whole cube to the left. """
-        # tmp = self.cube.faces[0]
-        # self.cube.faces[0] = self.cube.faces[2]
-        # self.cube.faces[2] = self.cube.faces[5]
-        # self.cube.faces[5] = self.cube.faces[4]
-        # self.cube.faces[4] = tmp
-
         self.cube.faces[3].frontMove()
-        # self.cube.faces[1].frontMove(False)
         self.cube.faces[1].frontMove(False)
-
-        self.cube.faces[4].frontMove()
-        self.cube.faces[4].frontMove()
-
 
         self._turn(0, 2, 5, 4)
 
-        # self.__faceInverser(3)
-        # self.__faceInverser(1)
-
-        
-
+    @decorator
     def turnRight(self):
         """ Turns the whole cube to the right. """
-
         self.cube.faces[3].frontMove(False)
         self.cube.faces[1].frontMove()
 
         self.cube.faces[2].frontMove()
         self.cube.faces[2].frontMove()
 
-
         self._turn(0, 4, 5, 2)
     
     def moveFromLetter(self, letter):
+        """ Executes the move linked to the given letter. """
+        print(letter)
         try:
             index = self.LETTERS.index(letter[0])
         except ValueError as e:
@@ -252,26 +196,38 @@ class Moves:
         elif length > 2:
             raise Exception('Unvalid move!')
 
-        moves = (
-            self.right,
-            self.left,
-            self.up,
-            self.front,
-            self.down,
-            self.back
-        )
+        # The cube is turned
+        if index > 5:
+            turns = (
+                self.turnRight, 
+                self.turnLeft, 
+                self.turnDown, 
+                self.turnUp, 
+            )
+            newIndex = index - 6 + (index == 7) + (length == 2)
+            turns[newIndex]()
+        # Move made on the main face (nb 0)
+        else:
+            moves = (
+                self.right,
+                self.left,
+                self.up,
+                self.front,
+                self.down,
+                self.back
+            )
 
-        moves[index](length == 1)
-
+            moves[index](length == 1)
     
     def shuffle(self):
+        """ Shuffle the cube. """
         turns = (
             self.turnDown,
             self.turnUp,
             self.turnRight,
             self.turnLeft
         )
-
+ 
         for _ in range(100):
             move = random.randint(0, 10)
             if move < 7:
@@ -282,7 +238,9 @@ class Moves:
             else:
                 self.turns[move - 7]()
 
-
+"""
+Verify move 2 times is equal to invert for the 5th face
+"""
 
         
     

@@ -78,21 +78,3 @@ class Cube:
         threeTimes(displayLine(4, 0, 2))
         threeTimes(displayLine(1))
         threeTimes(displayLine(5))
-
-    
-    def faceRotation(self, index):
-        pass
-    
-
-if __name__ == '__main__':
-    cube = Cube()
-    # cube.faces[3].stickers[1] = 'BLACK'
-    # for i in range(3):
-    #     print(cube.layerIsCompleted(i))
-    cube.display()
-
-
-"""
-    :TODO:
-        - Create moves for one face only + move faces 
-"""

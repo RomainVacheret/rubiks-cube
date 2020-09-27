@@ -55,14 +55,3 @@ class Face:
             idx += 1
 
         self.stickers = new if clockwise else new[::-1]
-
-
-if __name__ == '__main__':
-    face = Face('RED')
-    # face.stickers[0] = 'BLUE'
-    # for i in range(3):
-    #     print(face.lineIsCompleted(i))
-    face.stickers = list(range(9))
-    face.frontMove(False)
-    for a in face.lineGenerator():
-        print(a)
