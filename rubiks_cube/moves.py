@@ -8,16 +8,16 @@ class Moves:
     def __init__(self, cube):
         self.cube = cube
 
-    def __face_inverser(self, index):
+    def _face_inverter(self, index):
         self.cube.faces[index].stickers = self.cube.faces[index].stickers[::-1]
 
     def decorator(func):
         """ Decorator inversing back face before and after moving the cube. """
         def wrapper(*args, **kwargs):
             self = args[0]
-            self.__face_inverser(5)            
+            self._face_inverter(5)            
             result = func(*args, **kwargs)
-            self.__face_inverser(5)
+            self._face_inverter(5)
             return result
         
         return wrapper
@@ -99,7 +99,8 @@ class Moves:
 
     
     def back(self, clockwise):
-        raise Exception('TODO')
+        """ TODO"""
+        pass
 
 
     @decorator
@@ -239,7 +240,7 @@ class Moves:
                     '' if random.randint(0, 1) else '\''
                 ))
             else:
-                self.turns[move - 7]()
+                turns[move - 7]()
 
 """
 Verify move 2 times is equal to invert for the 5th face
