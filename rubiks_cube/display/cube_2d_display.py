@@ -51,13 +51,14 @@ class Cube2DDisplay:
 
             :param face: Face which is displayed.
             :type face: Face
-            :param x_pos: Stating x coordonates.
+            :param x_pos: Stating x coordonate.
             :type x_pos: int 
-            :param y_pos: Starting y coordonates.
+            :param y_pos: Starting y coordonate.
             :type y_pos: int
         """
         x_pos_ = x_pos
         y_pos_ = y_pos
+
         for line in face.line_generator():
             for sticker in line:
                 pygame.draw.rect(
@@ -71,6 +72,7 @@ class Cube2DDisplay:
                     )
                 )
                 x_pos_ += STICKER_LENGTH
+
             x_pos_ = x_pos
             y_pos_ += STICKER_LENGTH
         
@@ -78,7 +80,7 @@ class Cube2DDisplay:
         """ Redraw the screen. """
         # ORANGE
         self.display_face(self.cube.faces[3], LINE_LENGTH , 0)
-        # # GREEN WHITE BLUE
+        # GREEN WHITE BLUE
         self.display_face(self.cube.faces[4], 0, LINE_LENGTH)
         self.display_face(self.cube.faces[0], LINE_LENGTH, LINE_LENGTH)
         self.display_face(self.cube.faces[2], LINE_LENGTH * 2, LINE_LENGTH)
@@ -90,7 +92,7 @@ class Cube2DDisplay:
     def display(self):
         """ Displays the cube pattern
 
-            :TODO: Use deep copy to save sove rotations ?
+            :TODO: Use deep copy to save rotations ?
         """
         self.update_display()
         self.main_loop()

@@ -1,6 +1,7 @@
 class InvalidMoveException(Exception):
     pass
 
+
 class InvalidLineIndexException(Exception):
     pass
 

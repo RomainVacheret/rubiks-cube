@@ -1,6 +1,4 @@
 class Strange:
-    def __init__(self):
-        pass
 
     def ruru(self):
         return ('R', 'U', 'R\'', 'U\'')
