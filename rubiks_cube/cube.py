@@ -1,4 +1,5 @@
 from rubiks_cube.moves import Moves
+from rubiks_cube.exceptions import InvalidLineIndexException, InvalidLayerIndexException
 # https://en.wikipedia.org/wiki/Rubik%27s_Cube
 
 COLORS = ('WHITE', 'RED', 'BLUE', 'ORANGE', 'GREEN', 'YELLOW')
@@ -21,6 +22,11 @@ class Face:
         
     """
     def __init__(self, color):
+        """
+            Initialize the face according to the color passed by argument.
+            :param color: Color of the face 
+            :type color: COLORS -> str
+        """
         self.stickers = [color[0] for _ in range(9)]
 
     @property
@@ -31,21 +37,25 @@ class Face:
 
     @property
     def is_completed(self):
-        """ Informs if each face is completed. """
+        """ Informs if the face is completed. """
         return all(sticker == self.color for sticker in self.stickers)
 
     def line_is_completed(self, index):
-        """ Check if all three sticker of sticker line are of the 
+        """ Check if all three sticker of a sticker line are of the 
             same color. 
             Note that the color must be the face's color. 
             
-            :param index: Line index between 0 included and 3 excluded.
+            :param index: Index of the checked line.
             :type index: int
+
+            :raises InvalidLineIndexException: index must be between 0 included and 3 excluded.
             
-            :return: The color of each sticker is the same or not.
+            :returns: The color of each sticker is the same or not.
             :rtype: bool
         """
-        assert 0 <= index < 3
+        if  index > 2 or index < 0:
+            raise InvalidLineIndexException('Line index must be betwen 0 and 2 (both included)')
+
         starting_index = index * 3
         color = self.stickers[starting_index]
         return self.stickers[starting_index:starting_index + 3] \
@@ -54,7 +64,7 @@ class Face:
     def line_generator(self):
         """ Yields each line of the current face. """
         for index in range(0, 9, 3):
-            yield self.stickers[index:index+3]
+            yield self.stickers[index:index + 3]
     
     def front_move(self, clockwise=True):
         """ Rotates the current face.
@@ -70,6 +80,9 @@ class Face:
             idx += 1
 
         self.stickers = new if clockwise else new[::-1]
+    
+    def __eq__(self, obj):
+        return all(self.stickers[idx] == obj.stickers[idx] for idx in range(9))
 
 
 class Cube:
@@ -87,18 +100,22 @@ class Cube:
     @property
     def is_completed(self):
         """ Informs the color of each sticker is the same. """
-        return all(face for face in self.faces)
+        return all(face.is_completed for face in self.faces)
 
     def layer_is_completed(self, index):
         """ Check if a given layer is completed or not.
             
-            :param index: Layer index between 0 included and 3 excluded.
+            :param index: Index of the checked layer.
             :type index: int
 
-            :return: The color is the same for each sticker from a given layer.
+            :raises InvalidLayerIndexException:
+
+            :returns: The color is the same for each sticker from a given layer.
             :rtype: bool
         """
-        assert 0 <= index < 3
+        if  index > 2 or index < 0:
+            raise InvalidLayerIndexException('Layer index must be betwen 0 and 2 (both included)')
+
         check = lambda face, index: face.line_is_completed(index) \
             and face.stickers[index * 2] == face.color
         return all(check(face, index) for face in self.faces)
@@ -109,6 +126,8 @@ class Cube:
             - Green, White, Blue
             - Red
             - Yellow
+
+            TODO -> BROKEN
         """
         results = [self.faces[index].line_generator() for index in range(6)]
 
@@ -118,7 +137,7 @@ class Cube:
                 :param args: Index of the face(s) to print.
                 :type args: int or tuple(int)
 
-                :return: The line to print.
+                :returns: The line to print.
                 :rtype: str
             """
             display_face_line = lambda id: ' '.join(results[id].__next__())

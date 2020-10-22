@@ -1,6 +1,6 @@
 import random
 
-from .exceptions import UnValidMoveException
+from .exceptions import InvalidMoveException
 
 class Moves:
     LETTERS = ('R', 'L', 'U', 'F', 'D', 'B', 'X', 'Y')
@@ -197,7 +197,7 @@ class Moves:
         if length == 2:
             assert letter.endswith('\'')
         elif length > 2:
-            raise UnValidMoveException()
+            raise InvalidMoveException()
 
         # The cube is turned
         if index > 5:
