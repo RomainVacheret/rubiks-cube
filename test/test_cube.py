@@ -97,3 +97,10 @@ class TestCube (unittest.TestCase):
         
         for idx in range(3):
             self.assertTrue(self.cube.layer_is_completed(idx))
+
+    def test___eq__(self):
+        new_cube = Cube()
+        self.assertTrue(new_cube == self.cube)
+        
+        new_cube.faces[0].stickers[0] = 'Y'
+        self.assertFalse(new_cube == self.cube)

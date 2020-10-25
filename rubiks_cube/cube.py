@@ -156,3 +156,7 @@ class Cube:
         three_times(display_line(4, 0, 2))
         three_times(display_line(1))
         three_times(display_line(5))
+
+    
+    def __eq__(self, obj):
+        return all(self.faces[idx] == obj.faces[idx] for idx in range(6))
