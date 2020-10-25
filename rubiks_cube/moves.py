@@ -36,7 +36,7 @@ class Moves:
         self.cube.faces[d].stickers[:3] = tmp
     
     def _swap_bot(self, *face_list):
-        """ Swap the fist row of each given face. """
+        """ Swap the last row of each given face. """
         assert len(face_list) == 4
 
         a, b, c, d = face_list
