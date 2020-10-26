@@ -84,6 +84,10 @@ class Face:
     def __eq__(self, obj):
         return all(self.stickers[idx] == obj.stickers[idx] for idx in range(9))
 
+    def __repr__(self):
+        return f'[{" ".join(self.stickers)}]'
+        
+
 
 class Cube:
     """ Represents a Rubik's cube which is 
@@ -160,3 +164,6 @@ class Cube:
     
     def __eq__(self, obj):
         return all(self.faces[idx] == obj.faces[idx] for idx in range(6))
+    
+    def __repr__(self):
+        return f'[{" ".join(map(str, self.faces))}]'
