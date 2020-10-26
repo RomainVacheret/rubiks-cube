@@ -8,3 +8,7 @@ class InvalidLineIndexException(Exception):
 
 class InvalidLayerIndexException(Exception):
     pass
+
+
+class InvalidFacesException(Exception):
+    pass

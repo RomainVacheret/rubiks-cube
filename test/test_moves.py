@@ -21,28 +21,86 @@ class TestMoves(unittest.TestCase):
         pass
 
     def test__swap_top(self):
-        """ TODO """
-        pass
+        faces = [4, 0, 2, 5]
+        new_cube = Cube()
+        new_cube.moves._swap_top(*faces)
+
+        test_cube = Cube()
+        test_cube.faces[4].stickers[:3] = ['W'] * 3
+        test_cube.faces[0].stickers[:3] = ['B'] * 3
+        test_cube.faces[2].stickers[:3] = ['Y'] * 3
+        test_cube.faces[5].stickers[:3] = ['G'] * 3
+        self.assertTrue(test_cube == new_cube)
+
+        faces = [4, 5, 2, 0]
+        new_cube.moves._swap_top(*faces)
+        self.assertTrue(new_cube == self.cube)
 
     def test__swap_bot(self):
-        """ TODO """
-        pass
+        faces = [4, 0, 2, 5]
+        new_cube = Cube()
+        new_cube.moves._swap_bot(*faces)
+
+        test_cube = Cube()
+        test_cube.faces[4].stickers[-3:] = ['W'] * 3
+        test_cube.faces[0].stickers[-3:] = ['B'] * 3
+        test_cube.faces[2].stickers[-3:] = ['Y'] * 3
+        test_cube.faces[5].stickers[-3:] = ['G'] * 3
+        self.assertTrue(test_cube == new_cube)
+
+        faces = [4, 5, 2, 0]
+        new_cube.moves._swap_bot(*faces)
+        self.assertTrue(new_cube == self.cube)
 
     def test__swap_left(self):
-        """ TODO """
-        pass
+        faces = [0, 3, 5, 1]
+        new_cube = Cube()
+        new_cube.moves._swap_left(*faces)
+
+        test_cube = Cube()
+        test_cube.faces[0].stickers[0:7:3] = ['O'] * 3
+        test_cube.faces[3].stickers[0:7:3] = ['Y'] * 3
+        test_cube.faces[5].stickers[0:7:3] = ['R'] * 3
+        test_cube.faces[1].stickers[0:7:3] = ['W'] * 3
+        self.assertTrue(test_cube == new_cube)
+
+        faces = [0, 1, 5, 3]
+        new_cube.moves._swap_left(*faces)
+        self.assertTrue(new_cube == self.cube)
 
     def test__swap_right(self):
-        """ TODO """
-        pass
+        faces = [0, 3, 5, 1]
+        new_cube = Cube()
+        new_cube.moves._swap_right(*faces)
+
+        test_cube = Cube()
+        test_cube.faces[0].stickers[2:9:3] = ['O'] * 3
+        test_cube.faces[3].stickers[2:9:3] = ['Y'] * 3
+        test_cube.faces[5].stickers[2:9:3] = ['R'] * 3
+        test_cube.faces[1].stickers[2:9:3] = ['W'] * 3
+        self.assertTrue(test_cube == new_cube)
+
+        faces = [0, 1, 5, 3]
+        new_cube.moves._swap_right(*faces)
+        self.assertTrue(new_cube == self.cube)
 
     def test_tmp(self):
         """ TODO """
         pass
 
     def test_front(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        new_cube.moves.front()
+
+        test_cube = Cube()
+        test_cube.faces[1].stickers[:3] = ['B'] * 3
+        test_cube.faces[2].stickers[0:7:3] = ['O'] * 3
+        test_cube.faces[3].stickers[-3:] = ['G'] * 3
+        test_cube.faces[4].stickers[2:9:3] = ['R'] * 3
+        self.assertTrue(test_cube == new_cube)
+
+        new_cube.moves.front(False)
+        self.assertTrue(new_cube == self.cube)
 
     def test_back(self):
         """ TODO """

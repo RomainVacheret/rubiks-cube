@@ -1,9 +1,18 @@
 import random
 
-from .exceptions import InvalidMoveException
+from .exceptions import InvalidMoveException, InvalidFacesException
+
+""" TODO
+    - Verify move 2 times is equal to invert for the 5th face
+    - Faces combinations for swaps
+    - Add exceptions to docstring
+"""
 
 class Moves:
     LETTERS = ('R', 'L', 'U', 'F', 'D', 'B', 'X', 'Y')
+    INVALID_FACES_MSG = 'Four faces must be passed as argument. \
+        no duplicates are allowed and index must be within [0, 6['
+
 
     def __init__(self, cube):
         self.cube = cube
@@ -25,7 +34,8 @@ class Moves:
     # @decorator
     def _swap_top(self, *face_list):
         """ Swap the fist row of each given face. """
-        assert len(face_list) == 4
+        if len(face_list) != 4:
+            raise InvalidFacesException(self.INVALID_FACES_MSG)
 
         a, b, c, d = face_list
 
@@ -37,7 +47,8 @@ class Moves:
     
     def _swap_bot(self, *face_list):
         """ Swap the last row of each given face. """
-        assert len(face_list) == 4
+        if len(face_list) != 4:
+            raise InvalidFacesException(self.INVALID_FACES_MSG)
 
         a, b, c, d = face_list
 
@@ -49,7 +60,8 @@ class Moves:
     
     def _swap_left(self, *face_list):
         """ Swap the left column of the front face. """
-        assert len(face_list) == 4
+        if len(face_list) != 4:
+            raise InvalidFacesException(self.INVALID_FACES_MSG)
 
         a, b, c, d = face_list
 
@@ -61,7 +73,8 @@ class Moves:
     
     def _swap_right(self, *face_list):
         """ Swap the right column of the front face. """
-        assert len(face_list) == 4
+        if len(face_list) != 4:
+            raise InvalidFacesException(self.INVALID_FACES_MSG)
 
         a, b, c, d = face_list
 
@@ -241,10 +254,3 @@ class Moves:
                 ))
             else:
                 turns[move - 7]()
-
-"""
-Verify move 2 times is equal to invert for the 5th face
-"""
-
-        
-    
