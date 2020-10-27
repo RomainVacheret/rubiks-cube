@@ -127,7 +127,7 @@ class Moves:
         else:
             self._swap_top(4, 5, 2, 0)
     
-    # @decorator
+    @decorator
     def down(self, clockwiwe=True):
         """ Rotate the side underneath the cube. """
         self.cube.faces[1].front_move(clockwiwe)

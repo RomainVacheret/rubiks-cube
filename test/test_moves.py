@@ -107,12 +107,54 @@ class TestMoves(unittest.TestCase):
         pass
 
     def test_up(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        new_cube.moves.left(False)
+        new_cube.moves.right()
+        new_cube.moves.up()
+        test_cube = Cube()
+
+        stickers = [
+            ['B'] * 3 + 2 * ['R', 'W', 'R'],
+            3 * ['Y', 'R', 'Y'],
+            ['O', 'Y', 'O'] + 6 * ['B'],
+            3 * ['W'] + 3 * ['O'] + 3 * ['W'],
+            ['R', 'W', 'R'] + 6 * ['G'],
+            2 * ['O', 'Y', 'O'] + 3 * ['G'],
+        ]
+        for idx in range(6):
+            test_cube.faces[idx].stickers = stickers[idx]
+
+        self.assertTrue(new_cube == test_cube)
+
+        new_cube.moves.up(False)
+        new_cube.moves.left()
+        new_cube.moves.right(False)
+        self.assertTrue(new_cube == self.cube)
 
     def test_down(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        new_cube.moves.left(False)
+        new_cube.moves.right()
+        new_cube.moves.down()
+        test_cube = Cube()
+
+        stickers = [
+            2 * ['R', 'W', 'R'] + 3 * ['G'],
+            3 * ['Y'] + 3 * ['R'] + 3 * ['Y'],
+            6 * ['B'] + ['R', 'W', 'R'],
+            3 * ['W', 'O', 'W'],
+            6 * ['G'] + ['O', 'Y', 'O'],
+            3 * ['B'] + 2 * ['O', 'Y', 'O']
+        ]
+        for idx in range(6):
+            test_cube.faces[idx].stickers = stickers[idx]
+
+        self.assertTrue(new_cube == test_cube)
+
+        new_cube.moves.down(False)
+        new_cube.moves.left()
+        new_cube.moves.right(False)
+        self.assertTrue(new_cube == self.cube)
 
     def test_left(self):
         """ TODO """
