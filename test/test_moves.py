@@ -157,12 +157,56 @@ class TestMoves(unittest.TestCase):
         self.assertTrue(new_cube == self.cube)
 
     def test_left(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        new_cube.moves.up(False)
+        new_cube.moves.down()
+        new_cube.moves.left()
+        test_cube = Cube()
+
+        stickers = [
+            ['O'] + 2 * ['G'] + ['O'] + 2 * ['W'] + ['O'] + 2 * ['G'],
+            ['G'] + 2 * ['R'] + ['W'] + 2 * ['R'] + ['G'] + 2 * ['R'],
+            3 * ['W'] + 3 * ['B'] + 3 * ['W'],
+            ['B'] + 2 * ['O'] + ['Y'] + 2 * ['O'] + ['B'] + 2 * ['O'],
+            3 * ['Y', 'G', 'Y'],
+            ['R'] + 2 * ['B'] + ['R'] + 2 * ['Y'] + ['R'] + 2 * ['B'],
+        ]
+
+        for idx in range(6):
+            test_cube.faces[idx].stickers = stickers[idx]
+
+        self.assertTrue(new_cube == test_cube)
+
+        new_cube.moves.left(False)
+        new_cube.moves.down(False)
+        new_cube.moves.up()
+        self.assertTrue(new_cube == self.cube)
 
     def test_right(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        new_cube.moves.up(False)
+        new_cube.moves.down()
+        new_cube.moves.right()
+        test_cube = Cube()
+
+        stickers = [
+            2 * ['G'] + ['R'] + 2 * ['W'] + ['R'] + 2 * ['G'] + ['R'],
+            2 * ['R'] + ['B'] + 2 * ['R'] + ['Y'] + 2 * ['R'] + ['B'],
+            3 * ['W', 'B', 'W'],
+            2 * ['O'] + ['G'] + 2 * ['O'] + ['W'] + 2 * ['O'] + ['G'],
+            3 * ['Y'] + 3 * ['G'] + 3 * ['Y'],
+            2 * ['B'] + ['O'] + 2 * ['Y'] + ['O'] + 2 * ['B'] + ['O'],
+        ]
+
+        for idx in range(6):
+            test_cube.faces[idx].stickers = stickers[idx]
+
+        self.assertTrue(new_cube == test_cube)
+
+        new_cube.moves.right(False)
+        new_cube.moves.down(False)
+        new_cube.moves.up()
+        self.assertTrue(new_cube == self.cube)
 
     def test__turn(self):
         """ TODO """
