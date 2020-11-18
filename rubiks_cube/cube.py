@@ -23,7 +23,7 @@ class Face:
     """
     def __init__(self, color):
         """
-            Initialize the face according to the color passed by argument.
+            Initializes the face according to the color passed by argument.
             :param color: Color of the face 
             :type color: COLORS -> str
         """
@@ -103,11 +103,11 @@ class Cube:
 
     @property
     def is_completed(self):
-        """ Informs the color of each sticker is the same. """
+        """ Informs if the color of each sticker is the same or not. """
         return all(face.is_completed for face in self.faces)
 
     def layer_is_completed(self, index):
-        """ Check if a given layer is completed or not.
+        """ Checks if a given layer is completed or not.
             
             :param index: Index of the checked layer.
             :type index: int

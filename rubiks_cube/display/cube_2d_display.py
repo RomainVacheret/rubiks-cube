@@ -77,7 +77,7 @@ class Cube2DDisplay:
             y_pos_ += STICKER_LENGTH
         
     def update_display(self):
-        """ Redraw the screen. """
+        """ Redraws the screen. """
         # ORANGE
         self.display_face(self.cube.faces[3], LINE_LENGTH , 0)
         # GREEN WHITE BLUE

@@ -10,8 +10,8 @@ from .exceptions import InvalidMoveException, InvalidFacesException
 
 class Moves:
     LETTERS = ('R', 'L', 'U', 'F', 'D', 'B', 'X', 'Y')
-    INVALID_FACES_MSG = 'Four faces must be passed as argument. \
-        no duplicates are allowed and index must be within [0, 6['
+    INVALID_FACES_MSG = 'Four faces must be passed as arguments. \
+        No duplicates are allowed and index must be within [0, 6['
 
 
     def __init__(self, cube):
@@ -33,7 +33,7 @@ class Moves:
 
     # @decorator
     def _swap_top(self, *face_list):
-        """ Swap the fist row of each given face. """
+        """ Swaps the fist row of each given face. """
         if len(face_list) != 4:
             raise InvalidFacesException(self.INVALID_FACES_MSG)
 
@@ -46,7 +46,7 @@ class Moves:
         self.cube.faces[d].stickers[:3] = tmp
     
     def _swap_bot(self, *face_list):
-        """ Swap the last row of each given face. """
+        """ Swaps the last row of each given face. """
         if len(face_list) != 4:
             raise InvalidFacesException(self.INVALID_FACES_MSG)
 
@@ -59,7 +59,7 @@ class Moves:
         self.cube.faces[d].stickers[-3:] = tmp
     
     def _swap_left(self, *face_list):
-        """ Swap the left column of the front face. """
+        """ Swaps the left column of the front face. """
         if len(face_list) != 4:
             raise InvalidFacesException(self.INVALID_FACES_MSG)
 
@@ -72,7 +72,7 @@ class Moves:
         self.cube.faces[d].stickers[::3] = tmp
     
     def _swap_right(self, *face_list):
-        """ Swap the right column of the front face. """
+        """ Swaps the right column of the front face. """
         if len(face_list) != 4:
             raise InvalidFacesException(self.INVALID_FACES_MSG)
 
@@ -93,7 +93,7 @@ class Moves:
         self.cube.faces[3].stickers[-3:] = tmp
     
     def front(self, clockwise=True):
-        """ Rotate the side facing the player. """
+        """ Rotates the side facing the player. """
         self.cube.faces[0].front_move(clockwise)
 
         if clockwise:
@@ -118,7 +118,7 @@ class Moves:
 
     @decorator
     def up(self, clockwise=True):
-        """ Rotate the side on top of the front side. """
+        """ Rotates the side on top of the front side. """
 
         self.cube.faces[3].front_move(clockwise)
 
@@ -129,7 +129,7 @@ class Moves:
     
     @decorator
     def down(self, clockwiwe=True):
-        """ Rotate the side underneath the cube. """
+        """ Rotates the side underneath the cube. """
         self.cube.faces[1].front_move(clockwiwe)
 
         if clockwiwe:
@@ -139,7 +139,7 @@ class Moves:
         
     # @decorator
     def left(self, clockwiwe=True):
-        """ Rotate the side to the left of the cube."""
+        """ Rotates the side to the left of the cube."""
         self.cube.faces[4].front_move(clockwiwe)
 
         if clockwiwe:
@@ -149,7 +149,7 @@ class Moves:
 
     # @decorator
     def right(self, clockwiwe=True):
-        """ Rotate the side to the right of the cube."""
+        """ Rotates the side to the right of the cube."""
         self.cube.faces[2].front_move(clockwiwe)
 
         if clockwiwe:
@@ -237,7 +237,7 @@ class Moves:
             moves[index](length == 1)
     
     def shuffle(self):
-        """ Shuffle the cube. """
+        """ Shuffles the cube. """
         turns = (
             self.turn_down,
             self.turn_up,
