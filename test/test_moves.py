@@ -209,24 +209,94 @@ class TestMoves(unittest.TestCase):
         self.assertTrue(new_cube == self.cube)
 
     def test__turn(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        faces = new_cube.faces
+        new_faces = [
+            faces[2],
+            faces[1],
+            faces[5],
+            faces[3],
+            faces[0],
+            faces[4]
+        ]
+        new_cube.faces = new_faces
+
+        test_cube = Cube()
+        test_cube.moves._turn(0, 2, 5, 4)
+
+        self.assertTrue(test_cube == new_cube)
 
     def test_turn_down(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        faces = new_cube.faces
+        new_faces = [
+            faces[3],
+            faces[0],
+            faces[2],
+            faces[5],
+            faces[4],
+            faces[1]
+        ]
+        new_cube.faces = new_faces
+        
+        test_cube = Cube()
+        test_cube.moves.turn_down()
+
+        self.assertTrue(test_cube == new_cube)
 
     def test_turn_up(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        faces = new_cube.faces
+        new_faces = [
+            faces[1],
+            faces[5],
+            faces[2],
+            faces[0],
+            faces[4],
+            faces[3]
+        ]
+        new_cube.faces = new_faces
+        
+        test_cube = Cube()
+        test_cube.moves.turn_up()
+
+        self.assertTrue(test_cube == new_cube)
 
     def test_turn_left(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        faces = new_cube.faces
+        new_faces = [
+            faces[2],
+            faces[1],
+            faces[5],
+            faces[3],
+            faces[0],
+            faces[4]
+        ]
+        new_cube.faces = new_faces
+        
+        test_cube = Cube()
+        test_cube.moves.turn_left()
+
+        self.assertTrue(test_cube == new_cube)
 
     def test_turn_right(self):
-        """ TODO """
-        pass
+        new_cube = Cube()
+        faces = new_cube.faces
+        new_faces = [
+            faces[4],
+            faces[1],
+            faces[0],
+            faces[3],
+            faces[5],
+            faces[2]
+        ]
+        new_cube.faces = new_faces
+        
+        test_cube = Cube()
+        test_cube.moves.turn_right()
+
+        self.assertTrue(test_cube == new_cube)
 
     def test_move_from_letter(self):
         """ TODO """
