@@ -234,18 +234,22 @@ class TestMoves(unittest.TestCase):
         self.assertTrue(test_cube == new_cube)
 
     def test_turn_down(self):
+
+        def swap_faces(cube):
+            faces = cube.faces
+            new_faces = [
+                faces[3],
+                faces[0],
+                faces[2],
+                faces[5],
+                faces[4],
+                faces[1]
+            ]
+            cube.faces = new_faces
+
         # Simple test
         new_cube = Cube()
-        faces = new_cube.faces
-        new_faces = [
-            faces[3],
-            faces[0],
-            faces[2],
-            faces[5],
-            faces[4],
-            faces[1]
-        ]
-        new_cube.faces = new_faces
+        swap_faces(new_cube)
         
         test_cube = Cube()
         test_cube.moves.turn_down()
@@ -256,40 +260,33 @@ class TestMoves(unittest.TestCase):
         new_cube = Cube()
         self._prepare_cube(new_cube)
 
-        test_cube = Cube()
-        self._prepare_cube(test_cube)
-
-        faces = new_cube.faces
-        new_faces = [
-            faces[3],
-            faces[0],
-            faces[2],
-            faces[5],
-            faces[4],
-            faces[1]
-        ]
-
-        new_cube.faces = new_faces
+        swap_faces(new_cube)
         new_cube.faces[4].front_move()
         new_cube.faces[2].front_move(False)
         
+        test_cube = Cube()
+        self._prepare_cube(test_cube)
         test_cube.moves.turn_down()
 
         self.assertTrue(test_cube == new_cube)
 
     def test_turn_up(self):
+
+        def swap_faces(cube):
+            faces = cube.faces
+            new_faces = [
+                faces[1],
+                faces[5],
+                faces[2],
+                faces[0],
+                faces[4],
+                faces[3]
+            ]
+            cube.faces = new_faces
+
         # Simple test
         new_cube = Cube()
-        faces = new_cube.faces
-        new_faces = [
-            faces[1],
-            faces[5],
-            faces[2],
-            faces[0],
-            faces[4],
-            faces[3]
-        ]
-        new_cube.faces = new_faces
+        swap_faces(new_cube)
         
         test_cube = Cube()
         test_cube.moves.turn_up()
@@ -300,23 +297,12 @@ class TestMoves(unittest.TestCase):
         new_cube = Cube()
         self._prepare_cube(new_cube)
 
-        test_cube = Cube()
-        self._prepare_cube(test_cube)
-
-        faces = new_cube.faces
-        new_faces = [
-            faces[1],
-            faces[5],
-            faces[2],
-            faces[0],
-            faces[4],
-            faces[3]
-        ]
-
-        new_cube.faces = new_faces
+        swap_faces(new_cube)
         new_cube.faces[4].front_move(False)
         new_cube.faces[2].front_move()
-        
+
+        test_cube = Cube()
+        self._prepare_cube(test_cube)
         test_cube.moves.turn_up()
 
         self.assertTrue(test_cube == new_cube)
