@@ -1,25 +1,39 @@
 import unittest
 
-from rubiks_cube.cube import Cube
-from rubiks_cube.moves import Moves
+from rubiks_cube.cube import Cube, Face
+from rubiks_cube.moves import _face_invertion, face_inverter, Moves
+from rubiks_cube.exceptions import InvalidFacesException
+
+class TestFunctions(unittest.TestCase):
+    def test__face_inverter(self):
+        cube = Cube()
+        cube.faces[0].stickers = ['W', 'R', 'B', 'O', 'G', 'Y', 'G', 'O', 'B']
+        _face_invertion(cube, 0)
+        self.assertTrue(cube.faces[0].stickers == ['B', 'O', 'G', 'Y', 'G', 'O', 'B', 'R', 'W'])
+
+    def test_face_inerter(self):
+        """ TODO """
+        pass
 
 class TestMoves(unittest.TestCase):
     
     def setUp(self):
         self.cube = Cube()
         self.moves = Moves(self.cube)
+    
+    def test__assert_faces_validity(self):
+        first_list = [Face('ORANGE'), Face('WHITE')]
+        second_list = [Face('ORANGE'), Face('WHITE'), Face('BLUE'), Face('YELLOW')]
+        third_list = [Face('ORANGE'), Face('WHITE'), Face('BLUE'), Face('YELLOW'), Face('RED')]
+        fourth_list = []
 
-    def test__face_inverter(self):
-        new_cube = Cube()
-        new_cube.faces[0].stickers = ['W', 'R', 'B', 'O', 'G', 'Y', 'G', 'O', 'B']
-        new_moves = Moves(new_cube)
-        new_moves._face_inverter(0)
-        self.assertTrue(new_cube.faces[0].stickers == ['B', 'O', 'G', 'Y', 'G', 'O', 'B', 'R', 'W'])
+        with self.assertRaises(InvalidFacesException):
+            self.moves._assert_faces_validity(first_list)
+            self.moves._assert_faces_validity(third_list)
+            self.moves._assert_faces_validity(fourth_list)
 
-    def test_decorator(self):
-        """ TODO """
-        pass
-
+        self.moves._assert_faces_validity(second_list)
+    
     def test__swap_top(self):
         faces = [4, 0, 2, 5]
         new_cube = Cube()
@@ -88,132 +102,149 @@ class TestMoves(unittest.TestCase):
         """ TODO """
         pass
 
-    def test_front(self):
-        new_cube = Cube()
-        new_cube.moves.front()
+    def _init_front_cube(self):
+        cube = Cube()
+        cube.faces[1].stickers[:3] = ['B'] * 3
+        cube.faces[2].stickers[0:7:3] = ['O'] * 3
+        cube.faces[3].stickers[-3:] = ['G'] * 3
+        cube.faces[4].stickers[2:9:3] = ['R'] * 3
 
+        return cube
+
+    def test_mv_front_clockwise(self):
+        cube = self._init_front_cube()
         test_cube = Cube()
-        test_cube.faces[1].stickers[:3] = ['B'] * 3
-        test_cube.faces[2].stickers[0:7:3] = ['O'] * 3
-        test_cube.faces[3].stickers[-3:] = ['G'] * 3
-        test_cube.faces[4].stickers[2:9:3] = ['R'] * 3
-        self.assertTrue(test_cube == new_cube)
+        test_cube.moves.mv_front_clockwise()
 
-        new_cube.moves.front(False)
-        self.assertTrue(new_cube == self.cube)
+        self.assertEqual(test_cube, cube)
+    
+    def test_mv_front_anti_clockwise(self):
+        cube = Cube()
+        test_cube = self._init_front_cube()
+        test_cube.moves.mv_front_anti_clockwise()
+
+        self.assertEqual(test_cube, cube)
 
     def test_back(self):
         """ TODO """
         pass
-
-    def test_up(self):
-        new_cube = Cube()
-        new_cube.moves.left(False)
-        new_cube.moves.right()
-        new_cube.moves.up()
-        test_cube = Cube()
-
+    
+    def _init_cube(self):
+        cube = Cube()
         stickers = [
-            ['B'] * 3 + 2 * ['R', 'W', 'R'],
-            3 * ['Y', 'R', 'Y'],
-            ['O', 'Y', 'O'] + 6 * ['B'],
-            3 * ['W'] + 3 * ['O'] + 3 * ['W'],
-            ['R', 'W', 'R'] + 6 * ['G'],
-            2 * ['O', 'Y', 'O'] + 3 * ['G'],
-        ]
-        for idx in range(6):
-            test_cube.faces[idx].stickers = stickers[idx]
-
-        self.assertTrue(new_cube == test_cube)
-
-        new_cube.moves.up(False)
-        new_cube.moves.left()
-        new_cube.moves.right(False)
-        self.assertTrue(new_cube == self.cube)
-
-    def test_down(self):
-        new_cube = Cube()
-        new_cube.moves.left(False)
-        new_cube.moves.right()
-        new_cube.moves.down()
-        test_cube = Cube()
-
-        stickers = [
-            2 * ['R', 'W', 'R'] + 3 * ['G'],
-            3 * ['Y'] + 3 * ['R'] + 3 * ['Y'],
-            6 * ['B'] + ['R', 'W', 'R'],
-            3 * ['W', 'O', 'W'],
-            6 * ['G'] + ['O', 'Y', 'O'],
-            3 * ['B'] + 2 * ['O', 'Y', 'O']
-        ]
-        for idx in range(6):
-            test_cube.faces[idx].stickers = stickers[idx]
-
-        self.assertTrue(new_cube == test_cube)
-
-        new_cube.moves.down(False)
-        new_cube.moves.left()
-        new_cube.moves.right(False)
-        self.assertTrue(new_cube == self.cube)
-
-    def test_left(self):
-        new_cube = Cube()
-        new_cube.moves.up(False)
-        new_cube.moves.down()
-        new_cube.moves.left()
-        test_cube = Cube()
-
-        stickers = [
-            ['O'] + 2 * ['G'] + ['O'] + 2 * ['W'] + ['O'] + 2 * ['G'],
-            ['G'] + 2 * ['R'] + ['W'] + 2 * ['R'] + ['G'] + 2 * ['R'],
-            3 * ['W'] + 3 * ['B'] + 3 * ['W'],
-            ['B'] + 2 * ['O'] + ['Y'] + 2 * ['O'] + ['B'] + 2 * ['O'],
-            3 * ['Y', 'G', 'Y'],
-            ['R'] + 2 * ['B'] + ['R'] + 2 * ['Y'] + ['R'] + 2 * ['B'],
+            ['W', 'Y', 'W', 'Y', 'W', 'Y', 'W', 'Y', 'W'],
+            ['R', 'O', 'R', 'O', 'R', 'O', 'R', 'O', 'R'],
+            ['B', 'G', 'B', 'G', 'B', 'G', 'B', 'G', 'B'],
+            ['O', 'R', 'O', 'R', 'O', 'R', 'O', 'R', 'O'],
+            ['G', 'B', 'G', 'B', 'G', 'B', 'G', 'B', 'G'],
+            ['Y', 'W', 'Y', 'W', 'Y', 'W', 'Y', 'W', 'Y']
         ]
 
         for idx in range(6):
-            test_cube.faces[idx].stickers = stickers[idx]
+            cube.faces[idx].stickers = stickers[idx]
 
-        self.assertTrue(new_cube == test_cube)
+        return cube
+    
+    def test_mv_up_clockwise(self):
+        cube = self._init_cube()
+        cube.faces[0].stickers[:3] = ['B', 'G', 'B']
+        cube.faces[2].stickers[:3] = ['Y', 'W', 'Y']
+        cube.faces[4].stickers[:3] = ['W', 'Y', 'W']
+        cube.faces[5].stickers[-3:] = ['G', 'B', 'G']
+        test_cube = self._init_cube()
 
-        new_cube.moves.left(False)
-        new_cube.moves.down(False)
-        new_cube.moves.up()
-        self.assertTrue(new_cube == self.cube)
+        test_cube.moves.mv_up_clockwise()
 
-    def test_right(self):
-        new_cube = Cube()
-        new_cube.moves.up(False)
-        new_cube.moves.down()
-        new_cube.moves.right()
-        test_cube = Cube()
+        self.assertEqual(test_cube, cube)
+    
+    def test_mv_up_anti_clockwise(self):
+        cube = self._init_cube()
+        test_cube = self._init_cube()
+        test_cube.faces[0].stickers[:3] = ['B', 'G', 'B']
+        test_cube.faces[2].stickers[:3] = ['Y', 'W', 'Y']
+        test_cube.faces[4].stickers[:3] = ['W', 'Y', 'W']
+        test_cube.faces[5].stickers[-3:] = ['G', 'B', 'G']
 
-        stickers = [
-            2 * ['G'] + ['R'] + 2 * ['W'] + ['R'] + 2 * ['G'] + ['R'],
-            2 * ['R'] + ['B'] + 2 * ['R'] + ['Y'] + 2 * ['R'] + ['B'],
-            3 * ['W', 'B', 'W'],
-            2 * ['O'] + ['G'] + 2 * ['O'] + ['W'] + 2 * ['O'] + ['G'],
-            3 * ['Y'] + 3 * ['G'] + 3 * ['Y'],
-            2 * ['B'] + ['O'] + 2 * ['Y'] + ['O'] + 2 * ['B'] + ['O'],
-        ]
+        test_cube.moves.mv_up_anti_clockwise()
 
-        for idx in range(6):
-            test_cube.faces[idx].stickers = stickers[idx]
+        self.assertEqual(test_cube, cube)
+    
+    def test_mv_down_clockwise(self):
+        cube = self._init_cube()
+        cube.faces[0].stickers[-3:] = ['G', 'B', 'G']
+        cube.faces[2].stickers[-3:] = ['W', 'Y', 'W']
+        cube.faces[4].stickers[-3:] = ['Y', 'W', 'Y']
+        cube.faces[5].stickers[:3] = ['B', 'G', 'B']
+        test_cube = self._init_cube()
 
-        self.assertTrue(new_cube == test_cube)
+        test_cube.moves.mv_down_clockwise()
+        self.assertEqual(test_cube, cube)
+    
+    def test_mv_down_anti_clockwise(self):
+        cube = self._init_cube()
+        test_cube = self._init_cube()
+        test_cube.faces[0].stickers[-3:] = ['G', 'B', 'G']
+        test_cube.faces[2].stickers[-3:] = ['W', 'Y', 'W']
+        test_cube.faces[4].stickers[-3:] = ['Y', 'W', 'Y']
+        test_cube.faces[5].stickers[:3] = ['B', 'G', 'B']
 
-        new_cube.moves.right(False)
-        new_cube.moves.down(False)
-        new_cube.moves.up()
-        self.assertTrue(new_cube == self.cube)
+        test_cube.moves.mv_down_anti_clockwise()
+        self.assertEqual(test_cube, cube)
+    
+    def test_mv_left_clockwise(self):
+        cube = self._init_cube()
+        cube.faces[0].stickers[0:7:3] = ['O', 'R', 'O']
+        cube.faces[1].stickers[0:7:3] = ['W', 'Y', 'W']
+        cube.faces[3].stickers[0:7:3] = ['Y', 'W', 'Y']
+        cube.faces[5].stickers[0:7:3] = ['R', 'O', 'R']
+        test_cube = self._init_cube()
+
+        test_cube.moves.mv_left_clockwise()
+
+        self.assertEqual(test_cube, cube)
+    
+    def test_mv_left_anti_clockwise(self):
+        cube = self._init_cube()
+        cube.faces[0].stickers[0:7:3] = ['R', 'O', 'R']
+        cube.faces[1].stickers[0:7:3] = ['Y', 'W', 'Y']
+        cube.faces[3].stickers[0:7:3] = ['W', 'Y', 'W']
+        cube.faces[5].stickers[0:7:3] = ['O', 'R', 'O']
+        test_cube = self._init_cube()
+
+        test_cube.moves.mv_left_anti_clockwise()
+
+        self.assertEqual(test_cube, cube)
+    
+    def test_mv_right_clockwise(self):
+        cube = self._init_cube()
+        cube.faces[0].stickers[2:9:3] = ['R', 'O', 'R']
+        cube.faces[1].stickers[2:9:3] = ['Y', 'W', 'Y']
+        cube.faces[3].stickers[2:9:3] = ['W', 'Y', 'W']
+        cube.faces[5].stickers[2:9:3] = ['O', 'R', 'O']
+        test_cube = self._init_cube()
+
+        test_cube.moves.mv_right_clockwise()
+
+        self.assertEqual(test_cube, cube)
+    
+    def test_mv_right_anti_clockwise(self):
+        cube = self._init_cube()
+        cube.faces[0].stickers[2:9:3] = ['O', 'R', 'O']
+        cube.faces[1].stickers[2:9:3] = ['W', 'Y', 'W']
+        cube.faces[3].stickers[2:9:3] = ['Y', 'W', 'Y']
+        cube.faces[5].stickers[2:9:3] = ['R', 'O', 'R']
+        test_cube = self._init_cube()
+
+        test_cube.moves.mv_right_anti_clockwise()
+
+        self.assertEqual(test_cube, cube)
 
     def _prepare_cube(self, cube):
-        cube.moves.up(False)
-        cube.moves.down(False)
-        cube.moves.right(False)
-        cube.moves.up()
-        cube.moves.front()
+        cube.moves.mv_up_anti_clockwise()
+        cube.moves.mv_down_anti_clockwise()
+        cube.moves.mv_right_anti_clockwise()
+        cube.moves.mv_up_clockwise()
+        cube.moves.mv_front_clockwise()
 
     def test__turn(self):
         new_cube = Cube()
@@ -261,8 +292,8 @@ class TestMoves(unittest.TestCase):
         self._prepare_cube(new_cube)
 
         swap_faces(new_cube)
-        new_cube.faces[4].front_move()
-        new_cube.faces[2].front_move(False)
+        new_cube.faces[4].rotate_clockwise()
+        new_cube.faces[2].rotate_anti_clockwise()
         
         test_cube = Cube()
         self._prepare_cube(test_cube)
@@ -298,8 +329,8 @@ class TestMoves(unittest.TestCase):
         self._prepare_cube(new_cube)
 
         swap_faces(new_cube)
-        new_cube.faces[4].front_move(False)
-        new_cube.faces[2].front_move()
+        new_cube.faces[4].rotate_anti_clockwise()
+        new_cube.faces[2].rotate_clockwise()
 
         test_cube = Cube()
         self._prepare_cube(test_cube)
@@ -344,8 +375,8 @@ class TestMoves(unittest.TestCase):
         # ]
 
         # new_cube.faces = new_faces
-        # new_cube.faces[1].front_move(False)
-        # new_cube.faces[3].front_move()
+        # new_cube.faces[1].rotate_anti_clockwise()
+        # new_cube.faces[3].rotate_clockwise()
         
         # test_cube.moves.turn_left()
 
@@ -356,8 +387,6 @@ class TestMoves(unittest.TestCase):
         # print(new_cube)
 
         # self.assertTrue(test_cube == new_cube)
-
-        
 
     def test_turn_right(self):
         new_cube = Cube()

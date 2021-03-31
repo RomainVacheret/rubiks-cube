@@ -4,15 +4,6 @@ from rubiks_cube.exceptions import InvalidLineIndexException, InvalidLayerIndexE
 
 COLORS = ('WHITE', 'RED', 'BLUE', 'ORANGE', 'GREEN', 'YELLOW')
 
-CONFIGURATIONS = {
-    'WHITE': ('ORANGE', 'BLUE', 'RED', 'GREEN'),
-    'RED': ('YELLOW', 'GREEN', 'WHITE', 'BLUE'),
-    'BLUE': ('RED', 'WHITE', 'ORANGE', 'YELLOW'),
-    'ORANGE': ('WHITE', 'GREEN', 'YELLOW', 'BLUE'),
-    'GREEN': ('RED', 'YELLOW', 'ORANGE', 'WHITE'),
-    'YELLOW': ('ORANGE', 'GREEN', 'RED', 'BLUE'),
-}
-
 
 class Face:
     """ Represents a Rubik's cube face which is 
@@ -31,7 +22,7 @@ class Face:
 
     @property
     def color(self):
-        """ Reprensents the starting color of the face. """
+        """ Represents the starting color of the face. """
         # the 4th index is the center (which never changes)
         return self.stickers[4]
 
@@ -64,22 +55,24 @@ class Face:
     def line_generator(self):
         """ Yields each line of the current face. """
         for index in range(0, 9, 3):
-            yield self.stickers[index:index + 3]
-    
-    def front_move(self, clockwise=True):
-        """ Rotates the current face.
-            
-            :param clockwise: Clockwise or anticlockwise rotation.
-            :type clockwise: bool
-        """
+            yield self.stickers[index:index + 3]    
+
+    @staticmethod
+    def rotate_stickers(stickers):
         new = []
         idx = 6
         for _ in range(3):
             for i in range(3):
-                new.append(self.stickers[idx - (3 * i)])
+                new.append(stickers[idx - (3 * i)])
             idx += 1
-
-        self.stickers = new if clockwise else new[::-1]
+        
+        return new
+    
+    def rotate_clockwise(self):
+        self.stickers = self.rotate_stickers(self.stickers)
+    
+    def rotate_anti_clockwise(self):
+        self.stickers = self.rotate_stickers(self.stickers)[::-1]
     
     def __eq__(self, obj):
         return all(self.stickers[idx] == obj.stickers[idx] for idx in range(9))
@@ -87,7 +80,6 @@ class Face:
     def __repr__(self):
         return f'[{" ".join(self.stickers)}]'
         
-
 
 class Cube:
     """ Represents a Rubik's cube which is 

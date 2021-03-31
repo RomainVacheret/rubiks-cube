@@ -5,6 +5,29 @@ from rubiks_cube.cube import Face, Cube, COLORS
 
 
 class TestFace (unittest.TestCase):
+
+    def _init_stickers(self):
+        return (
+            ['W', 'R', 'B', 'O', 'G', 'Y', 'G', 'O', 'B'],
+            ['G', 'O', 'W', 'O', 'G', 'R', 'B', 'Y', 'B'],
+            ['B', 'O', 'G', 'Y', 'G', 'O', 'B', 'R', 'W'],
+            ['B', 'Y', 'B', 'R', 'G', 'O', 'W', 'O', 'G']
+        )
+    
+    def _init_faces(self):
+        new_face = Face(COLORS[0])
+        new_face2 = Face(COLORS[0])
+        new_face3 = Face(COLORS[0])
+        new_face4 = Face(COLORS[0])
+
+        stickers = self._init_stickers()
+
+        new_face.stickers, \
+        new_face2.stickers, \
+        new_face3.stickers, \
+        new_face4.stickers = stickers
+
+        return new_face, new_face2, new_face3, new_face4
     
     def setUp(self):
         """ Creates a white face. """
@@ -36,7 +59,7 @@ class TestFace (unittest.TestCase):
     def test_line_generator(self):
         merge_list = lambda list_: [element for line in list_ for element in line]
 
-        stickers = ['W', 'R', 'B', 'O', 'G', 'Y', 'G', 'O', 'B']
+        stickers = self._init_stickers()[0]
         new_face = Face(COLORS[0])
         new_face.stickers = stickers
         new_list = merge_list(new_face.line_generator())
@@ -48,27 +71,35 @@ class TestFace (unittest.TestCase):
         merged_line = merge_list(self.face.line_generator())
         self.assertFalse(merged_line == ['W'] * 8 + ['Y'])
     
-    def test_front_move(self):
-        self.face.front_move()
-        self.assertTrue(self.face == self.other_face)
+    def test__front_move(self):
+        s1, s2, s3 = self._init_stickers()[:3]
 
-        self.face.front_move(False)
-        self.assertTrue(self.face == self.other_face)
+        result = Face.rotate_stickers(s1)
+        self.assertEqual(result, s2)
 
-        new_face = Face(COLORS[0])
-        new_face.stickers = ['W', 'R', 'B', 'O', 'G', 'Y', 'G', 'O', 'B']
-        new_face2 = Face(COLORS[0])
-        new_face2.stickers = ['G', 'O', 'W', 'O', 'G', 'R', 'B', 'Y', 'B']
-        new_face3 = Face(COLORS[0])
-        new_face3.stickers = ['B', 'Y', 'B', 'R', 'G', 'O', 'W', 'O', 'G']
+        result = Face.rotate_stickers(result)
+        self.assertEqual(result, s3)
+    
+    def test_move_clockwise(self):
+        f1, f2, f3 = self._init_faces()[:3]
 
-        new_face.front_move()
-        self.assertTrue(new_face == new_face2)
+        f1.rotate_clockwise()
+        self.assertTrue(f1 == f2)
 
-        new_face.front_move(False)
-        new_face.front_move(False)
-        self.assertTrue(new_face == new_face3)
+        f1.rotate_clockwise()
+        self.assertTrue(f1 == f3)
+    
+    def test_move_anti_clockwise(self):
+        faces = list(self._init_faces())
+        faces[1] = faces[-1]
+        f1, f2, f3 = faces[:3]
 
+        f1.rotate_anti_clockwise()
+        self.assertTrue(f1 == f2)
+
+        f1.rotate_anti_clockwise()
+        self.assertTrue(f1 == f3)
+    
     def test___eq__(self):
         self.assertTrue(self.face == self.other_face)
 
