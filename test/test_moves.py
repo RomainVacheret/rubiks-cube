@@ -2,7 +2,7 @@ import unittest
 
 from rubiks_cube.cube import Cube, Face
 from rubiks_cube.moves import _face_invertion, face_inverter, Moves
-from rubiks_cube.exceptions import InvalidFacesException
+from rubiks_cube.exceptions import InvalidFacesException, InvalidMoveException
 
 class TestFunctions(unittest.TestCase):
     def test__face_inverter(self):
@@ -247,6 +247,7 @@ class TestMoves(unittest.TestCase):
         cube.moves.mv_front_clockwise()
 
     def test__turn(self):
+        # TODO -> improve
         new_cube = Cube()
         faces = new_cube.faces
         new_faces = [
@@ -265,7 +266,7 @@ class TestMoves(unittest.TestCase):
         self.assertTrue(test_cube == new_cube)
 
     def test_turn_down(self):
-
+        # TODO -> improve
         def swap_faces(cube):
             faces = cube.faces
             new_faces = [
@@ -302,7 +303,7 @@ class TestMoves(unittest.TestCase):
         self.assertTrue(test_cube == new_cube)
 
     def test_turn_up(self):
-
+        # TODO -> improve
         def swap_faces(cube):
             faces = cube.faces
             new_faces = [
@@ -339,6 +340,7 @@ class TestMoves(unittest.TestCase):
         self.assertTrue(test_cube == new_cube)
 
     def test_turn_left(self):
+        # TODO -> improve
         # Simple test
         new_cube = Cube()
         faces = new_cube.faces
@@ -389,6 +391,7 @@ class TestMoves(unittest.TestCase):
         # self.assertTrue(test_cube == new_cube)
 
     def test_turn_right(self):
+        # TODO -> improve
         new_cube = Cube()
         faces = new_cube.faces
         new_faces = [
@@ -405,10 +408,58 @@ class TestMoves(unittest.TestCase):
         test_cube.moves.turn_right()
 
         self.assertTrue(test_cube == new_cube)
+    
+    def test__assert_move_validity(self):
+        for move in Moves.LETTERS:
+            self.moves._assert_move_validity(move)
+        
+        with self.assertRaises(InvalidMoveException):
+            self.moves.move_from_letter('A')
+            self.moves.move_from_letter('')
+            self.moves.move_from_letter('F\'\'')
+            self.moves.move_from_letter('B\'\'')
 
     def test_move_from_letter(self):
-        """ TODO """
-        pass
+        # TODO -> add back
+        cube = self._init_cube()
+        cube_right = self._init_cube()
+        cube_right.faces[0].stickers[2:9:3] = ['R', 'O', 'R']
+        cube_right.faces[1].stickers[2:9:3] = ['Y', 'W', 'Y']
+        cube_right.faces[3].stickers[2:9:3] = ['W', 'Y', 'W']
+        cube_right.faces[5].stickers[2:9:3] = ['O', 'R', 'O']
+        cube_left = self._init_cube()
+        cube_left.faces[0].stickers[0:7:3] = ['O', 'R', 'O']
+        cube_left.faces[1].stickers[0:7:3] = ['W', 'Y', 'W']
+        cube_left.faces[3].stickers[0:7:3] = ['Y', 'W', 'Y']
+        cube_left.faces[5].stickers[0:7:3] = ['R', 'O', 'R']
+        cube_up = self._init_cube()
+        cube_up.faces[0].stickers[:3] = ['B', 'G', 'B']
+        cube_up.faces[2].stickers[:3] = ['Y', 'W', 'Y']
+        cube_up.faces[4].stickers[:3] = ['W', 'Y', 'W']
+        cube_up.faces[5].stickers[-3:] = ['G', 'B', 'G']
+        cube_down = self._init_cube()
+        cube_down.faces[0].stickers[-3:] = ['G', 'B', 'G']
+        cube_down.faces[2].stickers[-3:] = ['W', 'Y', 'W']
+        cube_down.faces[4].stickers[-3:] = ['Y', 'W', 'Y']
+        cube_down.faces[5].stickers[:3] = ['B', 'G', 'B']
+        test_cube = self._init_cube()
+
+        test_cube.moves.move_from_letter('R')
+        self.assertEqual(test_cube, cube_right)
+        test_cube.moves.move_from_letter('R\'')
+        self.assertEqual(test_cube, cube)
+        test_cube.moves.move_from_letter('L')
+        self.assertEqual(test_cube, cube_left)
+        test_cube.moves.move_from_letter('L\'')
+        self.assertEqual(test_cube, cube)
+        test_cube.moves.move_from_letter('U')
+        self.assertEqual(test_cube, cube_up)
+        test_cube.moves.move_from_letter('U\'')
+        self.assertEqual(test_cube, cube)
+        test_cube.moves.move_from_letter('D')
+        self.assertEqual(test_cube, cube_down)
+        test_cube.moves.move_from_letter('D\'')
+        self.assertEqual(test_cube, cube)
 
     def test_shuffle(self):
         """ TODO """

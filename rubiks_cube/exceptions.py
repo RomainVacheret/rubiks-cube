@@ -12,3 +12,7 @@ class InvalidLayerIndexException(Exception):
 
 class InvalidFacesException(Exception):
     pass
+
+
+class UnimplementedResourceException(Exception):
+    pass

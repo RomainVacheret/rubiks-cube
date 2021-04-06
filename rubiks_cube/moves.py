@@ -1,7 +1,11 @@
 import random
 import warnings
 
-from rubiks_cube.exceptions import InvalidMoveException, InvalidFacesException
+from rubiks_cube.exceptions import (
+    InvalidMoveException, 
+    InvalidFacesException, 
+    UnimplementedResourceException
+)
 
 """ TODO
     - Verify move 2 times is equal to invert for the 5th face
@@ -29,7 +33,7 @@ def face_inverter(face_index):
         return middle
 
 class Moves:
-    LETTERS = ('R', 'L', 'U', 'F', 'D', 'B', 'X', 'Y')
+    LETTERS = ('R', 'R\'', 'L', 'L\'', 'B', 'B\'', 'D', 'D\'', 'F', 'F\'', 'U', 'U\'')
 
     def __init__(self, cube):
         self.cube = cube
@@ -112,6 +116,12 @@ class Moves:
         self.cube.faces[3].stickers[-3:] = self.cube.faces[2].stickers[::3]
         self.cube.faces[2].stickers[::3] = self.cube.faces[1].stickers[:3][::-1]
         self.cube.faces[1].stickers[:3] = tmp
+    
+    def mv_back_clockwise(self):
+        raise UnimplementedResourceException('B move has not yet been implemented.')
+    
+    def mv_back_anti_clockwise(self):
+        raise UnimplementedResourceException('B\' move has not yet been implemented.')
 
     @face_inverter(5)
     def mv_up_clockwise(self):
@@ -190,42 +200,26 @@ class Moves:
 
         self._turn(0, 4, 5, 2)
     
+    def _assert_move_validity(self, movement):
+        if movement not in Moves.LETTERS:
+            raise InvalidMoveException(f'{movement} is an incorrect move!')
+    
     def move_from_letter(self, letter):
-        """ Executes the move linked to the given letter. """
-        print(letter)
-        try:
-            index = self.LETTERS.index(letter[0])
-        except ValueError as e:
-            raise e
-
-        length = len(letter)
-        if length == 2:
-            assert letter.endswith('\'')
-        elif length > 2:
-            raise InvalidMoveException()
-
-        # The cube is turned
-        if index > 5:
-            turns = (
-                self.turn_right, 
-                self.turn_left, 
-                self.turn_down, 
-                self.turn_up, 
-            )
-            new_index = index - 6 + (index == 7) + (length == 2)
-            turns[new_index]()
-        # Move made on the main face (nb 0)
-        else:
-            moves = (
-                self.right,
-                self.left,
-                self.up,
-                self.front,
-                self.down,
-                self.back
-            )
-
-            moves[index](length == 1)
+        self._assert_move_validity(letter)
+        [
+            self.mv_right_clockwise,
+            self.mv_right_anti_clockwise,
+            self.mv_left_clockwise,
+            self.mv_left_anti_clockwise,
+            self.mv_back_clockwise,
+            self.mv_back_anti_clockwise,
+            self.mv_down_clockwise,
+            self.mv_down_anti_clockwise,
+            self.mv_front_clockwise,
+            self.mv_front_anti_clockwise,
+            self.mv_up_clockwise,
+            self.mv_up_anti_clockwise
+        ][Moves.LETTERS.index(letter)]()
     
     def shuffle(self):
         """ Shuffles the cube. """
@@ -237,11 +231,11 @@ class Moves:
         )
  
         for _ in range(100):
-            move = random.randint(0, 10)
-            if move < 7:
+            move = random.randint(0, 15)
+            if move < 12:
                 self.move_from_letter('{}{}'.format(
                     self.LETTERS[move],
                     '' if random.randint(0, 1) else '\''
                 ))
             else:
-                turns[move - 7]()
+                turns[move - 12]()
