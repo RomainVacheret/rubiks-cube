@@ -1,10 +1,14 @@
+from __future__ import annotations
+
 import pygame 
 import sys
+
+from typing import NoReturn
 
 from rubiks_cube.display.cube_2d_display import Cube2DDisplay
 
 class Sequence2DDisplay(Cube2DDisplay):
-    def main_loop(self, sequence):
+    def main_loop(self, sequence: list[str]) -> NoReturn:
         """ Maintains the window displayed. 
             While it is displayed press 'q' (for azerty) keyboard
             to display the next state until the sequence of moves is completed.
@@ -30,7 +34,7 @@ class Sequence2DDisplay(Cube2DDisplay):
 
             pygame.display.update()
     
-    def display_sequence(self, sequence):
+    def display_sequence(self, sequence: list[str]) -> NoReturn:
         """ Returns a generator of changed displays made according 
             to the given sequence of moves.
 
@@ -44,7 +48,7 @@ class Sequence2DDisplay(Cube2DDisplay):
             super().update_display()
             yield
 
-    def display(self, sequence):
+    def display(self, sequence: list[str]) -> NoReturn:
         """ Displays the cube pattern. """
         super().update_display()
         self.main_loop(sequence)

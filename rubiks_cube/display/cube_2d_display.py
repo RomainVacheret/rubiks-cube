@@ -1,19 +1,22 @@
+from __future__ import annotations
+
 import pygame
 import sys
 
-from rubiks_cube.cube import Cube
+from typing import Final, NoReturn
 
+# TODO: replace with an enum
 # Sticker colors
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-ORANGE = (255, 140, 0)
-GREEN = (0, 255, 0)
-YELLOW = (255, 255, 0)
+WHITE: Final = (255, 255, 255)
+RED: Final  = (255, 0, 0)
+BLUE: Final = (0, 0, 255)
+ORANGE: Final = (255, 140, 0)
+GREEN: Final = (0, 255, 0)
+YELLOW: Final = (255, 255, 0)
 # Background
-GREY = (169, 169, 169)
+GREY: Final = (169, 169, 169)
 
-STICKER_TO_COLOR = {
+STICKER_TO_COLOR: Final = {
     'W': WHITE,
     'R': RED,
     'B': BLUE,
@@ -25,19 +28,19 @@ STICKER_TO_COLOR = {
     'U': (50, 50, 50),
 }
 
-STICKER_LENGTH = 30
-LINE_LENGTH = 3 * STICKER_LENGTH
+STICKER_LENGTH: Final = 30
+LINE_LENGTH: Final = 3 * STICKER_LENGTH
 
 
 class Cube2DDisplay:
-    def __init__(self, cube):
+    def __init__(self, cube: Cube):
         pygame.init()
         pygame.display.set_caption('Rubik\'s cube')
         self.surface = pygame.display.set_mode((3 * LINE_LENGTH, 4 * LINE_LENGTH))
         self.surface.fill(GREY)
         self.cube = cube
     
-    def main_loop(self):
+    def main_loop(self) -> NoReturn:
         """ Maintains the window displayed. """
         while True:
             for event in pygame.event.get():
@@ -46,7 +49,7 @@ class Cube2DDisplay:
                     sys.exit()
             pygame.display.update()
     
-    def display_face(self, face, x_pos, y_pos):
+    def display_face(self, face: Face, x_pos: int, y_pos: int) -> NoReturn:
         """ Displays a face.
 
             :param face: Face which is displayed.
@@ -76,7 +79,7 @@ class Cube2DDisplay:
             x_pos_ = x_pos
             y_pos_ += STICKER_LENGTH
         
-    def update_display(self):
+    def update_display(self) -> NoReturn:
         """ Redraws the screen. """
         # ORANGE
         self.display_face(self.cube.faces[3], LINE_LENGTH , 0)
@@ -89,7 +92,7 @@ class Cube2DDisplay:
         # YELLOW
         self.display_face(self.cube.faces[5], LINE_LENGTH, 3 * LINE_LENGTH)
         
-    def display(self):
+    def display(self) -> NoReturn:
         """ Displays the cube pattern
 
             :TODO: Use deep copy to save rotations ?
